@@ -37,13 +37,35 @@ public class GraphQLClientDemo {
 
     public void runDepartamento() {
         System.out.println("Cliente GraphQL Departamento");
-        departamentoGetAll();
+        //departamentoGetAll();
+        //departamentoGetById();
+        departamentoGetProgramadores();
     }
 
     private void departamentoGetAll() {
         System.out.println("GET ALL Departamentos");
         try {
             List<Departamento> result = mapperDep.fromDTO(departamentoService.getAll());
+            result.forEach(System.out::println);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void departamentoGetById() {
+        System.out.println("GET Departamento By Id");
+        try {
+            Departamento result = mapperDep.fromDTO(departamentoService.getByID("111"));
+            System.out.println(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void departamentoGetProgramadores() {
+        System.out.println("GET Programadores by Departamento");
+        try {
+            List<Programador> result = mapperProg.fromDTO(departamentoService.getProgramadores("111"));
             result.forEach(System.out::println);
         } catch (Exception e) {
             e.printStackTrace();

@@ -13,6 +13,7 @@ import java.util.List;
 public class DepartamentoService {
     private static DepartamentoService instance = null;
     DepartamentoMapper mapperDep = new DepartamentoMapper();
+    ProgramadorMapper mapperProg = new ProgramadorMapper();
 
     private DepartamentoService() {
     }
@@ -38,9 +39,49 @@ public class DepartamentoService {
             // Aquí ya tenemos la respuesta., vamos a pasarla a JSON
             JSONObject json = new JSONObject(response.body().string());
             // Ahora tenemos que sacar el array de programadores
-            JSONArray prog = json.getJSONObject("data").getJSONArray("getDepartamentos");
+            JSONArray dep = json.getJSONObject("data").getJSONArray("getDepartamentos");
             //System.out.println(prog);
-            return mapperDep.fromJSONArray(prog);
+            return mapperDep.fromJSONArray(dep);
+        } else {
+            throw new Exception("Error: " + response.code());
+        }
+    }
+
+    public DepartamentoDTO getByID(String idDepartamento) throws Exception {
+        GraphQLClient client = GraphQLClient.getInstance();
+        String query ="{\"query\":\"query Query($getDepartamentoByIdId: ID!) {\\n  getDepartamentoByID(id: $getDepartamentoByIdId) " +
+                "{\\n    id\\n    nombre\\n    presupuesto\\n    " +
+                "jefe {\\n     id\\n nombre\\n      experiencia\\n      salario\\n      perfil\\n      departamento\\n fechaAlta\\n    lenguajes\\n }\\n    " +
+                "programadores {\\n      id\\n nombre\\n      experiencia\\n      salario\\n      perfil\\n      departamento\\n fechaAlta\\n      lenguajes\\n    }\\n  }\\n}\"" +
+                ",\"variables\":{\n  \"getDepartamentoByIdId\": "+idDepartamento+"\n}}";
+
+        Response response = client.executeQuery(query);
+
+        if (response.isSuccessful()) {
+            // Aquí ya tenemos la respuesta., vamos a pasarla a JSON
+            JSONObject json = new JSONObject(response.body().string());
+            // Ahora tenemos que sacar el array de programadores
+            JSONObject dep = json.getJSONObject("data").getJSONObject("getDepartamentoByID");
+            return mapperDep.fromJSON(dep);
+        } else {
+            throw new Exception("Error: " + response.code());
+        }
+    }
+
+    public List<ProgramadorDTO> getProgramadores (String idDepartamento) throws Exception {
+        GraphQLClient client = GraphQLClient.getInstance();
+        String query ="{\"query\":\"query Query($getProgramadoresByIdId: ID!) {\\n  getProgramadoresByID(id: $getProgramadoresByIdId) " +
+                "{\\n    id\\n nombre\\n      experiencia\\n      salario\\n      perfil\\n      departamento\\n fechaAlta\\n      lenguajes\\n  }\\n}\"" +
+                ",\"variables\":{\n  \"getProgramadoresByIdId\": "+idDepartamento+"\n}}";
+
+        Response response = client.executeQuery(query);
+
+        if (response.isSuccessful()) {
+            // Aquí ya tenemos la respuesta., vamos a pasarla a JSON
+            JSONObject json = new JSONObject(response.body().string());
+            // Ahora tenemos que sacar el array de programadores
+            JSONArray dep = json.getJSONObject("data").getJSONArray("getProgramadoresByID");
+            return mapperProg.fromJSONArray(dep);
         } else {
             throw new Exception("Error: " + response.code());
         }

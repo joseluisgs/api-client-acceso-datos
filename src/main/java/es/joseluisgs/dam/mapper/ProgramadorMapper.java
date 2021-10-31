@@ -47,6 +47,7 @@ public class ProgramadorMapper extends BaseMapper<Programador, ProgramadorDTO> {
         return list;
     }
 
+    // Esto se debería mejorar porque no aseguras los campos nulos, o que no pidas...
     public ProgramadorDTO fromJSON(JSONObject item) {
         ProgramadorDTO dto = new ProgramadorDTO(
                 item.getString("id"),
