@@ -135,5 +135,35 @@ public class DepartamentoService {
         }
     }
 
+    public DepartamentoDTO update(DepartamentoModifyDTO depDTO) throws Exception {
+        GraphQLClient client = GraphQLClient.getInstance();
+
+        String query = "{\"query\":\"mutation UpdateDepartamentoMutation($updateDepartamentoId: ID!, $nombre: String!, $presupuesto: Float!, $idJefe: String!) {\\n  " +
+                "updateDepartamento(id: $updateDepartamentoId, nombre: $nombre, presupuesto: $presupuesto, id_jefe: $idJefe) " +
+                "{\\n    id\\n    nombre\\n    presupuesto\\n    " +
+                "jefe {\\n     id\\n nombre\\n      experiencia\\n      salario\\n      perfil\\n      departamento\\n fechaAlta\\n    lenguajes\\n }\\n    " +
+                "programadores {\\n      id\\n nombre\\n      experiencia\\n      salario\\n      perfil\\n      departamento\\n fechaAlta\\n      lenguajes\\n    }\\n  }\\n}\"" +
+                ",\"variables\":{" +
+                "\"updateDepartamentoId\":" + "\""+depDTO.getId()+"\"," +
+                "\"nombre\":" + "\""+depDTO.getNombre()+"\"," +
+                "\"presupuesto\":"+depDTO.getPresupuesto()+"," +
+                "\"idJefe\":\""+depDTO.getId_jefe()+"\"" +
+                "}}";
+
+        System.out.println(query);
+
+        Response response = client.executeQuery(query);
+
+        if (response.isSuccessful()) {
+            // Aquí ya tenemos la respuesta., vamos a pasarla a JSON
+            JSONObject json = new JSONObject(response.body().string());
+            // Ahora tenemos que sacar el array de programadores
+            JSONObject prog = json.getJSONObject("data").getJSONObject("updateDepartamento");
+            return mapperDep.fromJSON(prog);
+        } else {
+            throw new Exception("Error: " + response.code());
+        }
+    }
+
 
 }

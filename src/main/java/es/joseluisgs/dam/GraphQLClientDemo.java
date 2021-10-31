@@ -42,7 +42,8 @@ public class GraphQLClientDemo {
         //departamentoGetById();
         //departamentoGetProgramadores();
         //departamentoGetJefe();
-        departamentoPost();
+        //departamentoPost();
+        departamentoPut();
     }
 
     private void departamentoGetAll() {
@@ -93,6 +94,21 @@ public class GraphQLClientDemo {
         dep.setId_jefe("111");
         try {
             Departamento result = mapperDep.fromDTO(departamentoService.create(dep));
+            System.out.println(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void departamentoPut() {
+        System.out.println("PUT Departamento");
+        DepartamentoModifyDTO dep = new DepartamentoModifyDTO();
+        dep.setId("111");
+        dep.setNombre("Prueba Update");
+        dep.setPresupuesto(20000);
+        dep.setId_jefe("111");
+        try {
+            Departamento result = mapperDep.fromDTO(departamentoService.update(dep));
             System.out.println(result);
         } catch (Exception e) {
             e.printStackTrace();
