@@ -1,7 +1,9 @@
 package es.joseluisgs.dam.graphql;
 
 import es.joseluisgs.dam.dto.DepartamentoDTO;
+import es.joseluisgs.dam.dto.DepartamentoModifyDTO;
 import es.joseluisgs.dam.dto.ProgramadorDTO;
+import es.joseluisgs.dam.dto.ProgramadorModifyDTO;
 import es.joseluisgs.dam.mapper.DepartamentoMapper;
 import es.joseluisgs.dam.mapper.ProgramadorMapper;
 import okhttp3.Response;
@@ -101,6 +103,33 @@ public class DepartamentoService {
             // Ahora tenemos que sacar el array de programadores
             JSONObject dep = json.getJSONObject("data").getJSONObject("getJefeByID");
             return mapperProg.fromJSON(dep);
+        } else {
+            throw new Exception("Error: " + response.code());
+        }
+    }
+
+    public DepartamentoDTO create(DepartamentoModifyDTO depDTO) throws Exception {
+        GraphQLClient client = GraphQLClient.getInstance();
+
+        String query = "{\"query\":\"mutation Mutation($nombre: String!, $presupuesto: Float!, $idJefe: String!) {\\n  " +
+                "addDepartamento(nombre: $nombre, presupuesto: $presupuesto, id_jefe: $idJefe) " +
+                "{\\n    id\\n    nombre\\n    presupuesto\\n    " +
+                "jefe {\\n     id\\n nombre\\n      experiencia\\n      salario\\n      perfil\\n      departamento\\n fechaAlta\\n    lenguajes\\n }\\n    " +
+                "programadores {\\n      id\\n nombre\\n      experiencia\\n      salario\\n      perfil\\n      departamento\\n fechaAlta\\n      lenguajes\\n    }\\n  }\\n}\"" +
+                ",\"variables\":{" +
+                "\"nombre\":" + "\""+depDTO.getNombre()+"\"," +
+                "\"presupuesto\":"+depDTO.getPresupuesto()+"," +
+                "\"idJefe\":\""+depDTO.getId_jefe()+"\"" +
+                "}}";
+
+        Response response = client.executeQuery(query);
+
+        if (response.isSuccessful()) {
+            // Aquí ya tenemos la respuesta., vamos a pasarla a JSON
+            JSONObject json = new JSONObject(response.body().string());
+            // Ahora tenemos que sacar el array de programadores
+            JSONObject prog = json.getJSONObject("data").getJSONObject("addDepartamento");
+            return mapperDep.fromJSON(prog);
         } else {
             throw new Exception("Error: " + response.code());
         }

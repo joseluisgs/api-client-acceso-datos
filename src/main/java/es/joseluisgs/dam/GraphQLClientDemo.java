@@ -1,5 +1,6 @@
 package es.joseluisgs.dam;
 
+import es.joseluisgs.dam.dto.DepartamentoModifyDTO;
 import es.joseluisgs.dam.dto.ProgramadorDTO;
 import es.joseluisgs.dam.dto.ProgramadorModifyDTO;
 import es.joseluisgs.dam.graphql.DepartamentoService;
@@ -40,7 +41,8 @@ public class GraphQLClientDemo {
         //departamentoGetAll();
         //departamentoGetById();
         //departamentoGetProgramadores();
-        departamentoGetJefe();
+        //departamentoGetJefe();
+        departamentoPost();
     }
 
     private void departamentoGetAll() {
@@ -77,6 +79,20 @@ public class GraphQLClientDemo {
         System.out.println("GET Jefe by Departamento");
         try {
             Programador result = mapperProg.fromDTO(departamentoService.getJefe("111"));
+            System.out.println(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void departamentoPost() {
+        System.out.println("POST Departamento");
+        DepartamentoModifyDTO dep = new DepartamentoModifyDTO();
+        dep.setNombre("Prueba Insert");
+        dep.setPresupuesto(20000);
+        dep.setId_jefe("111");
+        try {
+            Departamento result = mapperDep.fromDTO(departamentoService.create(dep));
             System.out.println(result);
         } catch (Exception e) {
             e.printStackTrace();
