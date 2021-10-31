@@ -15,7 +15,7 @@ public class APIRestConfig {
 
     // Constructor del servicio con los elementos de la interfaz
     public static AccesoDatosRest getService() {
-        System.out.println("API URL: "+API_URL);
+        //System.out.println("API REST URL: "+API_URL);
         return RetrofitRestClient.getClient(API_URL).create(AccesoDatosRest.class);
     }
 

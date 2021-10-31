@@ -150,7 +150,7 @@ public class DepartamentoService {
                 "\"idJefe\":\""+depDTO.getId_jefe()+"\"" +
                 "}}";
 
-        System.out.println(query);
+        //System.out.println(query);
 
         Response response = client.executeQuery(query);
 
@@ -165,5 +165,85 @@ public class DepartamentoService {
         }
     }
 
+    public DepartamentoDTO delete(String idDepartamento) throws Exception {
+        GraphQLClient client = GraphQLClient.getInstance();
+        String query =  "{\"query\":\"mutation DeleteDepartamentoMutation($deleteDepartamentoId: ID!) {\\n  " +
+                "deleteDepartamento(id: $deleteDepartamentoId) {\\n    id\\n    nombre\\n    presupuesto\\n    " +
+                "jefe {\\n      id\\n nombre\\n      experiencia\\n      salario\\n      perfil\\n      departamento\\n fechaAlta\\n    lenguajes\\n   }\\n    " +
+                "programadores {\\n      id\\n nombre\\n      experiencia\\n      salario\\n      perfil\\n      departamento\\n fechaAlta\\n      lenguajes\\n    }\\n  }\\n}\"," +
+                "\"variables\":{\"deleteDepartamentoId\":\""+idDepartamento+"\"}}";
 
+        //System.out.println(query);
+
+        Response response = client.executeQuery(query);
+
+        if (response.isSuccessful()) {
+            // Aquí ya tenemos la respuesta., vamos a pasarla a JSON
+            JSONObject json = new JSONObject(response.body().string());
+            // Ahora tenemos que sacar el array de programadores
+            JSONObject prog = json.getJSONObject("data").getJSONObject("deleteDepartamento");
+            return mapperDep.fromJSON(prog);
+        } else {
+            throw new Exception("Error: " + response.code());
+        }
+    }
+
+
+    public DepartamentoDTO addProgramador(String idDepartamento, String idProgramador) throws Exception {
+        GraphQLClient client = GraphQLClient.getInstance();
+
+        String query =  "{\"query\":\"mutation AddProgramadorDepartamentoMutation($addProgramadorDepartamentoId: ID!, $idProgramador: String!) {\\n  " +
+                "addProgramadorDepartamento(id: $addProgramadorDepartamentoId, id_programador: $idProgramador) {\\n    " +
+                "id\\n    nombre\\n    presupuesto\\n    " +
+                "jefe {\\n      id\\n nombre\\n      experiencia\\n      salario\\n      perfil\\n      departamento\\n fechaAlta\\n    lenguajes\\n    }\\n    " +
+                "programadores {\\n      id\\n nombre\\n      experiencia\\n      salario\\n      perfil\\n      departamento\\n fechaAlta\\n      lenguajes\\n    }\\n  }\\n}\"" +
+                ",\"variables\":{" +
+                "\"addProgramadorDepartamentoId\":" + "\""+idDepartamento+"\"," +
+                "\"idProgramador\":" + "\""+idProgramador+"\"" +
+                "}}";
+
+        System.out.println(query);
+
+        Response response = client.executeQuery(query);
+
+        if (response.isSuccessful()) {
+            // Aquí ya tenemos la respuesta., vamos a pasarla a JSON
+            JSONObject json = new JSONObject(response.body().string());
+            // Ahora tenemos que sacar el array de programadores
+            JSONObject prog = json.getJSONObject("data").getJSONObject("addProgramadorDepartamento");
+            return mapperDep.fromJSON(prog);
+        } else {
+            throw new Exception("Error: " + response.code());
+        }
+
+    }
+
+    public DepartamentoDTO removeProgramador(String idDepartamento, String idProgramador) throws Exception {
+        GraphQLClient client = GraphQLClient.getInstance();
+
+        String query =  "{\"query\":\"mutation RemoveProgramadorDepartamentoMutation($removeProgramadorDepartamentoId: ID!, $idProgramador: String!) {\\n  " +
+                "removeProgramadorDepartamento(id: $removeProgramadorDepartamentoId, id_programador: $idProgramador) {\\n    " +
+                "id\\n    nombre\\n    presupuesto\\n    " +
+                "jefe {\\n      id\\n nombre\\n      experiencia\\n      salario\\n      perfil\\n      departamento\\n fechaAlta\\n    lenguajes\\n    }\\n    " +
+                "programadores {\\n      id\\n nombre\\n      experiencia\\n      salario\\n      perfil\\n      departamento\\n fechaAlta\\n      lenguajes\\n    }\\n  }\\n}\"" +
+                ",\"variables\":{" +
+                "\"removeProgramadorDepartamentoId\":" + "\""+idDepartamento+"\"," +
+                "\"idProgramador\":" + "\""+idProgramador+"\"" +
+                "}}";
+
+        System.out.println(query);
+
+        Response response = client.executeQuery(query);
+
+        if (response.isSuccessful()) {
+            // Aquí ya tenemos la respuesta., vamos a pasarla a JSON
+            JSONObject json = new JSONObject(response.body().string());
+            // Ahora tenemos que sacar el array de programadores
+            JSONObject prog = json.getJSONObject("data").getJSONObject("removeProgramadorDepartamento");
+            return mapperDep.fromJSON(prog);
+        } else {
+            throw new Exception("Error: " + response.code());
+        }
+
+    }
 }

@@ -22,6 +22,7 @@ public class GraphQLClient {
     private GraphQLClient() {}
 
     public static GraphQLClient getInstance() {
+        //System.out.println("API GRAPHQL URL: "+API_URL);
         if (client == null) {
             client = new GraphQLClient();
         }

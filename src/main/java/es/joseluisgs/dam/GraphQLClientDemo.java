@@ -38,12 +38,15 @@ public class GraphQLClientDemo {
 
     public void runDepartamento() {
         System.out.println("Cliente GraphQL Departamento");
-        //departamentoGetAll();
-        //departamentoGetById();
-        //departamentoGetProgramadores();
-        //departamentoGetJefe();
-        //departamentoPost();
+        departamentoGetAll();
+        departamentoGetById();
+        departamentoGetProgramadores();
+        departamentoGetJefe();
+        departamentoPost();
         departamentoPut();
+        departamentoAñadirProgramador();
+        departamentoEliminarProgramador();
+        departamentoDelete();
     }
 
     private void departamentoGetAll() {
@@ -114,6 +117,37 @@ public class GraphQLClientDemo {
             e.printStackTrace();
         }
     }
+
+    private void departamentoDelete() {
+        System.out.println("DELETE Departamento");
+        try {
+            Departamento result = mapperDep.fromDTO(departamentoService.delete("111"));
+            System.out.println(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void departamentoAñadirProgramador() {
+        System.out.println("PATCH Añadir programador");
+        try {
+            Departamento result = mapperDep.fromDTO(departamentoService.addProgramador("111", "777"));
+            System.out.println(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void departamentoEliminarProgramador() {
+        System.out.println("PATCH Eliminar programador");
+        try {
+            Departamento result = mapperDep.fromDTO(departamentoService.removeProgramador("111", "777"));
+            System.out.println(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void programadorGetAll() {
         System.out.println("GET ALL Programadores");

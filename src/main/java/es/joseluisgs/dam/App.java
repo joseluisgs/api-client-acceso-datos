@@ -16,14 +16,14 @@ public class App
     {
         System.out.println( "API CLIENT ACCESO A DATOS" );
 
-//        RestClientDemo restClient = new RestClientDemo();
+        RestClientDemo restClient = new RestClientDemo();
 //        restClient.runProgramador();
 //        restClient.runDepartamento();
 
 
         GraphQLClientDemo graphQLClient= new GraphQLClientDemo();
 //        graphQLClient.runProgramador();
-        graphQLClient.runDepartamento();
+//        graphQLClient.runDepartamento();
 
 
 
