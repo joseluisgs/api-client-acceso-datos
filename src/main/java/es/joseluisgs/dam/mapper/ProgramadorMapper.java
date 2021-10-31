@@ -33,7 +33,11 @@ public class ProgramadorMapper extends BaseMapper<Programador, ProgramadorDTO> {
                 item.getLenguajes());
     }
 
+    // OJO aquí podría usar librerías de alto nivel como GSON o Jackson, pero he decidido hacer el mapeo manual
+    // Esto en el fondo es lo que esta haciendo Retrofit por nosotros...
     public List<ProgramadorDTO> fromJSONArray(JSONArray items) {
+        // Se puede hacer como  List<ProgramadorDTO> list = IntStream.range(0, items.length())
+        // .mapToObj(items::getJSONObject).map(this::fromJSON).collect(Collectors.toList());
         List<ProgramadorDTO> list = new ArrayList<>();
         for (int i = 0; i < items.length(); i++) {
             JSONObject item = items.getJSONObject(i);

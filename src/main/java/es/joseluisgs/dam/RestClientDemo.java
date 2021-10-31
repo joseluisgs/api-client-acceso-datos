@@ -114,7 +114,7 @@ public class RestClientDemo {
         prog.setPerfil("FullStack");
         prog.setDepartamento_id("111");
         prog.setFechaAlta(Date.from(Instant.now()));
-        prog.setLenguajes(Collections.singletonList("Java, TypeScript"));
+        prog.setLenguajes(List.of("Java, TypeScript"));
         try {
             Response<ProgramadorDTO> response = restService.programadorUpdate("111", prog).execute();
             // La hemos obtenido correctamente
@@ -140,7 +140,7 @@ public class RestClientDemo {
         prog.setPerfil("FullStack");
         prog.setDepartamento_id("111");
         prog.setFechaAlta(Date.from(Instant.now()));
-        prog.setLenguajes(Collections.singletonList("Java, TypeScript"));
+        prog.setLenguajes(List.of("Java, TypeScript"));
         try {
             Response<ProgramadorDTO> response = restService.programadorCreate(prog).execute();
             // La hemos obtenido correctamente

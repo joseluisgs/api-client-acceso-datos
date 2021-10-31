@@ -1,0 +1,159 @@
+## Mi ejemplo Departamento < -- > Programador
+
+# Importo el tipo de dato
+scalar DateTime
+
+# Tipos de datos de esquema y sus relaciones
+
+# Tipo Programador
+"""
+Tipo de Programador
+"""
+type Programador {
+  id: ID!
+  nombre: String!
+  experiencia: Int!
+  salario: Float!
+  perfil: Perfil!
+  """
+  Relacion con Departamento: id de Departamento
+  """
+  departamento: String!
+  fechaAlta: DateTime!
+  """
+  Tipos de Lenguajes aceptados
+  """
+  lenguajes: [Lenguaje!]!
+}
+
+# Departamento
+"""
+Tipo de Departamento
+"""
+type Departamento {
+  id: ID!
+  nombre: String!
+  presupuesto: Float!
+  """
+  Relacion con Programador 1-1: id de Programador
+  """
+  jefe: Programador!
+  """
+  Relacion con Programador 1-M: Lista de id de Programadores. Esta lista no está vacía
+  """
+  programadores: [Programador]
+}
+
+"""
+Perfil de Programador
+"""
+enum Perfil {
+  BackEnd
+  FrontEnd
+  FullStack
+}
+
+"""
+Lenguajes que domina
+"""
+enum Lenguaje {
+  Java
+  TypeScript
+  NodeJS
+  VueJS
+}
+
+# Querys o puntos de entradas para consultar datos, son nuestros GET
+type Query {
+  hello: String
+
+  # Departamentos
+  """
+  Obtiene todos los Departamentos
+  """
+  getDepartamentos: [Departamento!]!
+  """
+  Obtiene un departamento dado su ID
+  """
+  getDepartamentoByID(id: ID!): Departamento
+  """
+  Obtiene los programadores asociados a un departamento dado su ID
+  """
+  getProgramadoresByID(id: ID!): [Programador]
+  """
+  Obtiene el jefe asignado a un departamento dado su ID
+  """
+  getJefeByID(id: ID!): Programador!
+  ## Podriamos buscar por jefe, por presupuesto, etc...
+
+  # Programadores
+  """
+  Obtiene todos los Programadores
+  """
+  getProgramadores: [Programador!]!
+  """
+  Obtiene un programador dado su ID
+  """
+  getProgramadorByID(id: ID!): Programador
+  """
+  Obtiene los programadores asociados a un departamento dado el ID del departamento
+  """
+  getProgramadoresByDepartamentoID(departamentoID: String!): [Programador] #Puede ser vacío
+  """
+  Obtiene la lista de programadores dado un perfil
+  """
+  getProgramadoresByPerfil(perfil: String!): [Programador]
+  """
+  Obtiene la lista de programadores que dominan un lenguaje dado
+  """
+  getProgramadoresByLenguaje(lenguaje: String!): [Programador]
+  ## Podriamos buscar por jefe, por presupuesto, etc...
+}
+
+# Mutaciones o punttos de entrada para modifica/mutar nuestros datos, son nuestros POT, UPDATE, PATCH y DELETE
+type Mutation {
+  # Departamentos
+  """
+  Crea un nuevo departamento con sus datos básicos, pero no los programadores
+  """
+  addDepartamento(nombre: String!, presupuesto: Float!, id_jefe: String!): Departamento
+  """
+  Elimina un departamento dado su ID
+  """
+  deleteDepartamento(id: ID!): Departamento
+  """
+  Actualiza los datos de un departamento dado su ID
+  """
+  updateDepartamento(id: ID!, nombre: String!, presupuesto: Float!, id_jefe: String!): Departamento
+  """
+  Añade un programador a un departamento dado el ID del departamento y el ID del Programador
+  """
+  addProgramadorDepartamento(id: ID!, id_programador: String!): Departamento
+  """
+  Elimina un programador asociado a un departamento dado en ID del Departamento y el ID del Programador
+  """
+  removeProgramadorDepartamento(id: ID!, id_programador: String!): Departamento
+
+  # Programadores
+  """
+  Crea un nuevo programador con sus datos básicos
+  """
+  addProgramador(nombre: String!, experiencia: Int!, salario: Float!, perfil: Perfil!, departamento_id: String!, fechaAlta: DateTime!, lenguajes: [Lenguaje!]!): Programador
+  """
+  Elimina un programador dado su ID
+  """
+  deleteProgramador(id: ID!): Programador
+  """
+  Actualiza los datos de un programador dado su ID
+  """
+  updateProgramador(
+    id: ID!
+    nombre: String!
+    experiencia: Int!
+    salario: Float!
+    perfil: Perfil!
+    departamento_id: String!
+    fechaAlta: DateTime!
+    lenguajes: [Lenguaje!]!
+  ): Programador
+}

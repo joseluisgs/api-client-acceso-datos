@@ -4,6 +4,8 @@ import okhttp3.*;
 
 import java.io.IOException;
 
+// Podría usar Retrofit, pero retrofit solo es una librería de alto nivel de OkHttp. Son los mismos desarrolladores
+// Simplemente es para que se vea como se haría paso a paoso
 public class GraphQLClient {
     private static final String server = "localhost";
     // Puerto del microservicio
